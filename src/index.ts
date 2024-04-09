@@ -1,25 +1,14 @@
-import {
-  engine,
-  InputAction,
-  Material,
-  PointerEvents,
-  pointerEventsSystem,
-  PointerEventType,
-  Transform
-} from '@dcl/sdk/ecs'
+import { InputAction, Material, PointerEvents, pointerEventsSystem, PointerEventType } from '@dcl/sdk/ecs'
 import { Color4 } from '@dcl/sdk/math'
-import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
 import { createCube } from './factory'
-import { getDataToSign, snapshotERC712 } from './utils'
 import { getUserAccount } from '~system/EthereumController'
-import { ProposalsListUI, VotingUI } from './ui'
+import { ProposalsListUI } from './ui'
 import { getSceneInfo } from '~system/Scene'
-import { fetchProposals } from './snapshot'
+import { fetchProposals, vote } from './snapshot'
 
 // Defining behavior. See `src/systems.ts` file.
 // engine.addSystem(circularSystem)
 // engine.addSystem(bounceScalingSystem)
-const provider = createEthereumProvider()
 
 const ui = new ProposalsListUI([])
 const sceneCoords = getSceneInfo({})
@@ -84,76 +73,4 @@ export async function main() {
   pointerEventsSystem.onPointerDown({ entity: abstainCube, opts: { button: InputAction.IA_POINTER } }, () => {
     if (address.address) void vote(address.address, { ...proposalOpts, choice: 3 })
   })
-}
-
-// Get players coordinates
-async function getCoordinates() {
-  const sceneBase = JSON.parse((await sceneCoords).metadata).scene.base.split(',')
-  const playerPosition = Transform.getOrNull(engine.PlayerEntity)
-
-  if (playerPosition)
-    return [
-      +sceneBase[0] + Math.floor(playerPosition.position.x / 16),
-      +sceneBase[1] + Math.floor(playerPosition.position.z / 16)
-    ]
-  return []
-}
-
-// function to vote
-async function vote(
-  fromAddress: string,
-  snapshotOpts: { space: string; choice: number; proposal: string; reason: string; app: string; metadata: string }
-) {
-  const address = await getChecksummedAddress(fromAddress)
-  const playerPosition = Transform.getOrNull(engine.PlayerEntity)
-  if (playerPosition)
-    snapshotOpts.metadata = JSON.stringify({ survey: [], world: { coordinates: await getCoordinates() } })
-
-  const dataToSign = await getDataToSign({
-    from: address,
-    ...snapshotOpts
-  })
-  provider.sendAsync(
-    {
-      method: 'eth_signTypedData_v4',
-      params: [address, JSON.stringify(dataToSign)],
-      jsonrpc: '2.0',
-      id: 999999999999
-    },
-    async (err, result) => {
-      if (err) {
-        return console.error(err)
-      }
-      console.log(result)
-      const snapshotRes = await fetch('https://seq.snapshot.org/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: address,
-          sig: result.result,
-          data: {
-            domain: snapshotERC712.domain,
-            types: {
-              Vote: snapshotERC712.types.Vote
-            },
-            message: dataToSign.message
-          }
-        })
-      })
-      if (snapshotRes.status !== 200) {
-        throw new Error('Could not fetch snapshot')
-      }
-
-      const choice = snapshotOpts.choice
-    }
-  )
-}
-
-// function to fetch checksummed ethereum address
-async function getChecksummedAddress(address: string) {
-  const res = await fetch(`https://ethchecksumg0tdjsmm-checksum.functions.fnc.fr-par.scw.cloud/?eth=${address}`)
-  if (res.status !== 200) {
-    throw new Error('Could not fetch checksummed address')
-  }
-  return await res.text()
 }

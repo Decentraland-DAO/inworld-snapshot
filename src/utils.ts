@@ -1,3 +1,7 @@
+import { engine, Transform } from '@dcl/sdk/ecs'
+import { getSceneInfo } from '~system/Scene'
+const sceneCoords = getSceneInfo({})
+
 export function getRandomHexColor(): string {
   const letters = '0123456789ABCDEF'
   let color = '#'
@@ -5,6 +9,23 @@ export function getRandomHexColor(): string {
     color += letters[Math.floor(Math.random() * 16)]
   }
   return color
+}
+
+// Get players coordinates
+export async function getCoordinates() {
+  const sceneBase = JSON.parse((await sceneCoords).metadata).scene.base.split(',')
+  const playerPosition = Transform.getOrNull(engine.PlayerEntity)
+
+  if (playerPosition)
+    return [
+      +sceneBase[0] + Math.floor(playerPosition.position.x / 16),
+      +sceneBase[1] + Math.floor(playerPosition.position.z / 16)
+    ]
+  return []
+}
+
+export function getAvatarURL(ethAddress: string) {
+  return `https://cdn.stamp.fyi/avatar/eth:${ethAddress}?s=40`
 }
 
 export async function getDataToSign(message: {
