@@ -1,23 +1,51 @@
 // Fetch proposals from snapshot
-export async function fetchProposals(space: string) {
-  const res = await fetch('https://hub.snapshot.org/graphql', {
+export async function fetchProposals(space: string, state: string = 'active') {
+  /*   const res = await fetch('https://hub.snapshot.org/graphql', {
     headers: {
-      accept: '*/*',
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      operationName: 'Space',
+      operationName: 'Proposals',
       variables: {
-        id: 'snapshot.dcl.eth'
+        first: 100,
+        state,
+        space_in: [space]
       },
-      query:
-        'query Space($id: String!) {\n  space(id: $id) {\n    id\n    name\n    about\n    network\n    symbol\n    network\n    terms\n    skin\n    avatar\n    twitter\n    website\n    github\n    coingecko\n    private\n    domain\n    admins\n    moderators\n    members\n    categories\n    plugins\n    followersCount\n    template\n    guidelines\n    verified\n    flagged\n    parent {\n      id\n      name\n      avatar\n      followersCount\n      children {\n        id\n      }\n    }\n    children {\n      id\n      name\n      avatar\n      followersCount\n      parent {\n        id\n      }\n    }\n    voting {\n      delay\n      period\n      type\n      quorum\n      privacy\n      hideAbstain\n    }\n    strategies {\n      name\n      network\n      params\n    }\n    validation {\n      name\n      params\n    }\n    voteValidation {\n      name\n      params\n    }\n    filters {\n      minScore\n      onlyMembers\n    }\n    delegationPortal {\n      delegationType\n      delegationContract\n      delegationApi\n    }\n    treasuries {\n      name\n      address\n      network\n    }\n  }\n}'
+      query: `query Proposals($first: Int!, $state: String!, $space_in: [String]) {
+      proposals(
+        first: $first
+        where: {state: $state, space_in: $space_in}
+      ) {
+        id
+        title
+        start
+        end
+        state
+        space {
+          id
+          name
+          avatar
+        }
+      }
+    }`
     }),
+
     method: 'POST'
   })
   if (res.status !== 200) {
+    console.log(res.status)
+
     throw new Error('Could not fetch proposals')
   }
   const { data } = await res.json()
-  return data
+  return data.proposals
+ */
+  const res = await fetch('https://governance.decentraland.org/api/proposals?limit=25&offset=0&status=active')
+  if (res.status !== 200) {
+    console.log(res.status)
+
+    throw new Error('Could not fetch proposals')
+  }
+  const data = await res.json()
+  return data.data
 }

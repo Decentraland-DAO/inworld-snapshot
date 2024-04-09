@@ -29,7 +29,7 @@ export async function main() {
   console.log(JSON.parse((await sceneCoords).metadata).scene.base)
 
   const proposals = await fetchProposals('snapshot.dcl.eth')
-  ui.displayUi(proposals)
+  ui.displayUi(proposals.slice(-1))
 
   const address = await getUserAccount({})
   const yesCube = createCube(6.5, 1, 8, false)

@@ -99,15 +99,11 @@ export class ProposalsListUI {
     ReactEcsRenderer.setUiRenderer(() => (
       <UiEntity
         uiTransform={{
-          width: 400,
-          height: 800,
-          margin: {
-            top: -800 / 2,
-            left: -400 / 2
-          },
+          width: '30%',
+          height: '80%',
           padding: 4,
           positionType: 'absolute',
-          position: { top: '50%', left: '50%' },
+          position: { top: '10%', left: '40%' },
           display: this.display ? 'flex' : 'none'
         }}
         uiBackground={{ color: Color4.create(0.5, 0.8, 0.1, 0.6) }}
@@ -117,7 +113,7 @@ export class ProposalsListUI {
             <UiEntity
               uiTransform={{
                 width: '100%',
-                height: '100%',
+                height: '10%',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'space-between'
@@ -127,10 +123,10 @@ export class ProposalsListUI {
               <Label
                 uiTransform={{
                   width: '100%',
-                  height: 50,
+                  height: 20,
                   margin: '8px 0'
                 }}
-                value={`Name: ${proposal.name}`}
+                value={`Name: ${proposal.title}`}
                 fontSize={24}
               />
               <Button
@@ -140,7 +136,7 @@ export class ProposalsListUI {
                 fontSize={18}
                 onMouseDown={() => {
                   void openExternalUrl({
-                    url: `https://governance.decentraland.org/proposal/?id=${proposal.id}}`
+                    url: `https://decentraland.org/governance/proposal/?id=${proposal.id}`
                   })
                 }}
               />
