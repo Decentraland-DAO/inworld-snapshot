@@ -1,8 +1,19 @@
 import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
-import { Proposal, ProposalList } from './types'
+// import { Proposal, ProposalList } from './types'
 import { getCoordinates, getDataToSign, snapshotERC712 } from './utils'
 import { engine, Transform } from '@dcl/sdk/ecs'
 const provider = createEthereumProvider()
+
+export type Proposal = {
+  id: string
+  title: string
+  space: {id: string}
+  body: string
+  choices: string[]
+  scores: number[]
+  scores_total: number
+}
+type ProposalList = Proposal[]
 
 // Fetch proposals from snapshot
 export async function fetchProposals(space: string, state: string = 'active'): Promise<ProposalList[]> {

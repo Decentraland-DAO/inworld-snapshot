@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@dcl/eslint-config": "^1.1.12",
-    "@dcl/js-runtime": "7.3.12",
+    "@dcl/js-runtime": "7.4.15",
     "@dcl/sdk": "latest"
   },
   "engines": {
