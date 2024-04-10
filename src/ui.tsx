@@ -463,7 +463,7 @@ export class ProposalsUI {
                   key={index}
                   uiTransform={{ width: 400, height: 40, margin: 4 }}
                   value={
-                    choice +
+                    choice.charAt(0).toUpperCase() + choice.slice(1) +
                     ' - ' +
                     ((selectedProposal.scores[index] / selectedProposal.scores_total) * 100).toFixed(2) +
                     '%'
