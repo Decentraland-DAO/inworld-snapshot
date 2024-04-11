@@ -202,12 +202,12 @@ export class ProposalsUI {
               color={Color4.fromHexString('#FFFFFF')}
               onMouseDown={() => {
                 propScroll = Math.max(0, propScroll - 1)
-                console.log(propScroll)
+                // console.log(propScroll)
               }}
               uiBackground={{
                 textureMode: 'stretch',
                 texture: {
-                  src: 'images/pagination.png'
+                  src: 'images/button.png'
                 }
               }}
               disabled={propScroll === 0}
@@ -253,7 +253,7 @@ export class ProposalsUI {
                     onMouseDown={() => {
                       if (selectedProposal.id === proposal.id) return
                       fetchProposal(proposal.id).then((res) => {
-                        console.log(res)
+                        // console.log(res)
                         selectedProposal = res
                         textSections = splitTextIntoSections(res.body, 70, 20)
                         currentPage = 0
@@ -282,12 +282,12 @@ export class ProposalsUI {
               onMouseDown={() => {
                 if (propScroll >= this.proposals.length - 5) return
                 propScroll++
-                console.log(propScroll)
+                // console.log(propScroll)
               }}
               uiBackground={{
                 textureMode: 'stretch',
                 texture: {
-                  src: 'images/pagination.png'
+                  src: 'images/button.png'
                 }
               }}
               disabled={propScroll >= this.proposals.length - 5}
@@ -378,7 +378,7 @@ export class ProposalsUI {
                   uiBackground={{
                     textureMode: 'stretch',
                     texture: {
-                      src: 'images/pagination.png'
+                      src: 'images/button.png'
                     }
                   }}
                 />
@@ -394,7 +394,7 @@ export class ProposalsUI {
                   uiBackground={{
                     textureMode: 'stretch',
                     texture: {
-                      src: 'images/pagination.png'
+                      src: 'images/button.png'
                     }
                   }}
                 />
@@ -419,7 +419,7 @@ export class ProposalsUI {
                   uiBackground={{
                     textureMode: 'stretch',
                     texture: {
-                      src: 'images/pagination.png'
+                      src: 'images/button.png'
                     }
                   }}
                   onMouseDown={() => {
@@ -441,7 +441,7 @@ export class ProposalsUI {
                 uiBackground={{
                   textureMode: 'stretch',
                   texture: {
-                    src: 'images/pagination.png'
+                    src: 'images/button.png'
                   }
                 }}
               />
@@ -473,10 +473,10 @@ export class ProposalsUI {
                   fontSize={18}
                   onMouseDown={() => {
                     if (this.address) {
-                      console.log(this.address)
+                      // console.log(this.address)
                       vote(this.address, {
                         space: 'snapshot.dcl.eth',
-                        choice: 3,
+                        choice: index,
                         proposal: selectedProposal.id,
                         reason: '',
                         app: 'in-world',
@@ -492,7 +492,7 @@ export class ProposalsUI {
                   uiBackground={{
                     textureMode: 'stretch',
                     texture: {
-                      src: 'images/pagination.png'
+                      src: 'images/button.png'
                     }
                   }}
                 />
@@ -505,8 +505,8 @@ export class ProposalsUI {
   displayUi(proposals: any[], address: string | undefined) {
     this.proposals = proposals
     this.address = address
-    console.log(proposals)
-    console.log(address, 'address log')
+    // console.log(proposals)
+    // console.log(address, 'address log')
 
     this.display = true
   }
