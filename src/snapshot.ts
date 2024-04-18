@@ -7,7 +7,7 @@ const provider = createEthereumProvider()
 export type Proposal = {
   id: string
   title: string
-  space: {id: string}
+  space: { id: string }
   body: string
   choices: string[]
   scores: number[]
@@ -174,7 +174,7 @@ export async function vote(
 
 // function to fetch checksummed ethereum address
 async function getChecksummedAddress(address: string) {
-  const res = await fetch(`https://ethchecksumg0tdjsmm-checksum.functions.fnc.fr-par.scw.cloud/?eth=${address}`)
+  const res = await fetch(`https://round-tooth-ac18.hp-230.workers.dev/${address}`)
   if (res.status !== 200) {
     throw new Error('Could not fetch checksummed address')
   }
