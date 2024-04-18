@@ -12,7 +12,6 @@ import {
   TweenSequence
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion } from '@dcl/sdk/math'
-import { createCube } from './factory'
 import { getUserAccount } from '~system/EthereumController'
 import {
   // ProposalsListUI,
