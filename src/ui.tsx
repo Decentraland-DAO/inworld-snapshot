@@ -476,7 +476,7 @@ export class ProposalsUI {
                       // console.log(this.address)
                       vote(this.address, {
                         space: 'snapshot.dcl.eth',
-                        choice: index,
+                        choice: index + 1,
                         proposal: selectedProposal.id,
                         reason: '',
                         app: 'in-world',
