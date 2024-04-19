@@ -25,7 +25,7 @@ import { fetchProposals, vote } from './snapshot'
 // engine.addSystem(bounceScalingSystem)
 
 // const ui = new ProposalsListUI([])
-const proposalsUi = new ProposalsUI()
+export const proposalsUi = new ProposalsUI()
 const sceneCoords = getSceneInfo({})
 
 export async function main() {
@@ -121,7 +121,7 @@ export async function main() {
   })
   pointerEventsSystem.onPointerDown({ entity: dclDaoVoting, opts: { button: InputAction.IA_POINTER } }, () => {
     // ui.displayUi(proposals.slice(-1))
-    console.log(proposals)
+    // console.log(proposals)
     proposalsUi.displayUi(proposals, address.address)
   })
 

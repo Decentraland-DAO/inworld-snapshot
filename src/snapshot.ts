@@ -2,6 +2,7 @@ import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
 // import { Proposal, ProposalList } from './types'
 import { getCoordinates, getDataToSign, snapshotERC712 } from './utils'
 import { engine, Transform } from '@dcl/sdk/ecs'
+import { proposalsUi } from '.'
 const provider = createEthereumProvider()
 
 export type Proposal = {
@@ -147,7 +148,7 @@ export async function vote(
     },
     async (err, result) => {
       if (err) {
-        return console.error(err)
+        return console.error(err), proposalsUi.displayResults('Error: Vote Rejected')
       }
       console.log(result)
       const snapshotRes = await fetch('https://seq.snapshot.org/', {
@@ -167,6 +168,15 @@ export async function vote(
       })
       if (snapshotRes.status !== 200) {
         throw new Error('Could not fetch snapshot')
+      } else {
+        const { error, message } = await snapshotRes.json()
+        if (error) {
+          console.error(error)
+          proposalsUi.displayResults('Error: Vote Rejected')
+        } else {
+          console.log(message)
+          proposalsUi.displayResults('Vote Submitted!')
+        }
       }
     }
   )

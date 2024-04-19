@@ -161,6 +161,7 @@ export class ProposalsUI {
   display: boolean = false
   proposals: any[] = []
   address: string | undefined
+  result: string = ''
   constructor() {
     ReactEcsRenderer.setUiRenderer(() => (
       <UiEntity
@@ -463,7 +464,8 @@ export class ProposalsUI {
                   key={index}
                   uiTransform={{ width: 400, height: 40, margin: 4 }}
                   value={
-                    choice.charAt(0).toUpperCase() + choice.slice(1) +
+                    choice.charAt(0).toUpperCase() +
+                    choice.slice(1) +
                     ' - ' +
                     ((selectedProposal.scores[index] / selectedProposal.scores_total) * 100).toFixed(2) +
                     '%'
@@ -499,6 +501,61 @@ export class ProposalsUI {
               ))}
           </UiEntity>
         </UiEntity>
+        <UiEntity
+          uiTransform={{
+            width: 500,
+            height: 250,
+            padding: 4,
+            positionType: 'absolute',
+            position: { top: '50%', left: '25%' },
+            display: this.result != '' ? 'flex' : 'none',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <UiEntity
+            uiTransform={{
+              width: '100%',
+              height: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            uiBackground={{
+              textureMode: 'stretch',
+              texture: {
+                src: 'images/selectedProposalBody.png'
+              }
+            }}
+          >
+            <Label
+              uiTransform={{
+                width: '100%',
+                height: 50,
+                margin: '8px 0'
+              }}
+              value={this.result}
+              fontSize={24}
+              color={Color4.fromHexString('#000000')}
+            />
+          </UiEntity>
+          <Button
+            uiTransform={{ width: 80, height: 40, margin: 4 }}
+            value="Close"
+            variant="secondary"
+            fontSize={18}
+            color={Color4.fromHexString('#FFFFFF')}
+            onMouseDown={() => {
+              this.result = ''
+            }}
+            uiBackground={{
+              textureMode: 'stretch',
+              texture: {
+                src: 'images/button.png'
+              }
+            }}
+          />
+        </UiEntity>
       </UiEntity>
     ))
   }
@@ -509,6 +566,9 @@ export class ProposalsUI {
     // console.log(address, 'address log')
 
     this.display = true
+  }
+  displayResults(result: string) {
+    this.result = result
   }
 }
 
