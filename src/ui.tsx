@@ -18,7 +18,7 @@ let selectedProposal: Proposal = {
 let propScroll = 0
 
 const splitTextIntoSections = (text: string, charsPerLine: number, linesPerChunk: number) => {
-  let lines = []
+  const lines = []
   let currentLine = ''
 
   text.split(' ').forEach((word) => {
@@ -47,7 +47,7 @@ const splitTextIntoSections = (text: string, charsPerLine: number, linesPerChunk
     lines.push(currentLine)
   }
 
-  let textSections = []
+  const textSections = []
   for (let i = 0; i < lines.length; i += linesPerChunk) {
     textSections.push(lines.slice(i, i + linesPerChunk).join('\n'))
   }
@@ -68,94 +68,6 @@ const prevPage = () => {
     currentPage--
   }
 }
-
-// export class VotingUI {
-//   display: boolean = false
-//   vote: 'yes' | 'no' | 'abstain' = 'abstain'
-//   constructor() {
-//     ReactEcsRenderer.setUiRenderer(() => (
-//       <UiEntity
-//         uiTransform={{
-//           width: 400,
-//           height: 150,
-//           margin: {
-//             top: -150 / 2,
-//             left: -400 / 2
-//           },
-//           padding: 4,
-//           positionType: 'absolute',
-//           position: { top: '50%', left: '50%' },
-//           display: this.display ? 'flex' : 'none'
-//         }}
-//         uiBackground={{ color: Color4.create(0.5, 0.8, 0.1, 0.6) }}
-//       >
-//         <UiEntity
-//           uiTransform={{
-//             width: '100%',
-//             height: '100%',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//             justifyContent: 'space-between'
-//           }}
-//           uiBackground={{ color: Color4.fromHexString('#70ac76ff') }}
-//         >
-//           <Label
-//             uiTransform={{
-//               width: '100%',
-//               height: 50,
-//               margin: '8px 0'
-//             }}
-//             value={`You successfully voted: ${this.vote.toUpperCase()}`}
-//             fontSize={24}
-//           />
-//           <Label
-//             uiTransform={{
-//               width: '100%',
-//               height: 50,
-//               margin: '8px 0'
-//             }}
-//             value={`${getPlayerPosition()}`}
-//             fontSize={24}
-//           />
-//           <Button
-//             uiTransform={{ width: 100, height: 40, margin: 4 }}
-//             value="Close"
-//             variant="primary"
-//             fontSize={18}
-//             onMouseDown={() => {
-//               this.display = false
-//             }}
-//           />
-//           <Button
-//             uiTransform={{ width: 150, height: 40, margin: 4 }}
-//             value="Open proposal"
-//             variant="primary"
-//             fontSize={18}
-//             onMouseDown={() => {
-//               void openExternalUrl({
-//                 url: 'https://governance.decentraland.org/proposal/?id=c96c3830-4d4c-11ee-beb5-696f9c967b67'
-//               })
-//             }}
-//           />
-//         </UiEntity>
-//       </UiEntity>
-//     ))
-//   }
-//   // display ui and set vote
-//   displayUi(vote: 'yes' | 'no' | 'abstain') {
-//     console.log('displayUi', vote)
-
-//     this.vote = vote
-//     this.display = true
-//   }
-// }
-
-// function getPlayerPosition() {
-//   const playerPosition = Transform.getOrNull(engine.PlayerEntity)
-//   if (!playerPosition) return ' no data yet'
-//   const { x, y, z } = playerPosition.position
-//   return `{X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}, z: ${z.toFixed(2)} }`
-// }
 
 export class ProposalsUI {
   display: boolean = false
@@ -253,7 +165,7 @@ export class ProposalsUI {
                     color={Color4.fromHexString('#000000')}
                     onMouseDown={() => {
                       if (selectedProposal.id === proposal.id) return
-                      fetchProposal(proposal.id).then((res) => {
+                      void fetchProposal(proposal.id).then((res) => {
                         // console.log(res)
                         selectedProposal = res
                         textSections = splitTextIntoSections(res.body, 70, 20)
@@ -316,7 +228,13 @@ export class ProposalsUI {
                 src: 'images/selectedProposalTitle.png'
               }
             }}
-            value={selectedProposal.title ? selectedProposal.title : 'Loading...'}
+            value={
+              selectedProposal.title
+                ? selectedProposal.title.length > 50
+                  ? `${selectedProposal.title.substring(0, 50)}...`
+                  : selectedProposal.title
+                : 'Loading...'
+            }
             fontSize={20}
             color={Color4.fromHexString('#ffffff')}
           />
@@ -476,7 +394,7 @@ export class ProposalsUI {
                   onMouseDown={() => {
                     if (this.address) {
                       // console.log(this.address)
-                      vote(this.address, {
+                      void vote(this.address, {
                         space: 'snapshot.dcl.eth',
                         choice: index + 1,
                         proposal: selectedProposal.id,
